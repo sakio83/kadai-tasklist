@@ -46,7 +46,7 @@ class TasksController extends Controller
     {
         $tasks = new Tasklist;
         $tasks->content = $request->content;
-        $task->save();
+        $tasks->save();
 
         return redirect('/');
     }
@@ -62,7 +62,7 @@ class TasksController extends Controller
         $tasks = Tasklist::find($id);
 
         return view('tasks.show', [
-            'tasks' => $task,
+            'task' => $tasks,
         ]);
     }
 
