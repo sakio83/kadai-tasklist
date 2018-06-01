@@ -29,10 +29,10 @@ class TasksController extends Controller
      */
     public function create()
     {
-        $tasks = new Tasklist;
+        $task = new Tasklist;
 
         return view('tasks.create', [
-            'tasks' => $tasks,
+            'task' => $task,
         ]);
     }
 
@@ -44,9 +44,9 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-        $tasks = new Tasklist;
-        $tasks->content = $request->content;
-        $tasks->save();
+        $task = new Tasklist;
+        $task->content = $request->content;
+        $task->save();
 
         return redirect('/');
     }
@@ -74,11 +74,27 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        $tasks = Tasklist::find($id);
+        $task = Tasklist::find($id);
 
         return view('tasks.edit', [
-            'tasks' => $tasks,
+            'task' => $task,
         ]);
     }
+    
+ public function update(Request $request, $id)
+    {
+        $task = Tasklist::find($id);
+        $task->content = $request->content;
+        $task->save();
 
+        return redirect('/');
+    }
+    // "Delete processing" when `messages/id` is accessed by DELETE
+    public function destroy ($id)
+    {
+         $task = Tasklist::find($id);
+        $task->delete();
+
+        return redirect('/');
+    }
 }

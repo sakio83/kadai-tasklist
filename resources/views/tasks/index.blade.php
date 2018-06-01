@@ -10,7 +10,6 @@
             @foreach ($tasks as $task)
                 <li>{{ $task->content }}</li>
                 <li>{!! link_to_route('tasks.show', $task->id, ['id' => $task->id]) !!} : {{ $task->content }}</li>
-                {!! link_to_route('tasks.create', 'タスクの投稿') !!}
 
             @endforeach
         </ul>
