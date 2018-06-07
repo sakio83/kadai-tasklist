@@ -12,7 +12,7 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>{!! link_to_route('tasks.create', '新規メッセージの投稿') !!}</li>
+                    <li>{!! link_to_route('tasks.create', 'タスクの投稿') !!}</li>
                 </ul>
             </div>
         </div>

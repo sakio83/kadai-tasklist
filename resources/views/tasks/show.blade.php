@@ -15,11 +15,10 @@
             <td>{{ $task->content }}</td>
         </tr>
     </table>
- {!! link_to_route('tasks.edit', 'このメッセージを編集', ['id' => $task->id], ['class' => 'btn btn-default']) !!}
+ {!! link_to_route('tasks.edit', 'タスクを編集', ['id' => $task->id], ['class' => 'btn btn-default']) !!}
     
     {!! Form::model($task, ['route' => ['tasks.destroy', $task->id], 'method' => 'delete']) !!}
         {!! Form::submit('削除', ['class' => 'btn btn-danger']) !!}
     {!! Form::close() !!}
-
 
 @endsection
