@@ -26,7 +26,7 @@ class AddTitleToMessagesTable extends Migration
     public function down()
     {
         Schema::table('tasklists', function (Blueprint $table) {
-            $task->dropColumn('status');
+            $table->dropColumn('status');
         });
     }
 }
