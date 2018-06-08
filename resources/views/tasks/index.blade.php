@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
- @include('users.users', ['users' => $users])
+@include('users.users', ['users' => $users])
   <h1>タスク一覧</h1>
 
 @if (count($tasks) > 0)
