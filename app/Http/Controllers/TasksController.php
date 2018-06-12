@@ -48,7 +48,6 @@ class TasksController extends Controller
         return view('tasks.create', [
             'task' => $task,
         ]);
-        return redirect()->back();
         
     }
 
@@ -70,7 +69,7 @@ class TasksController extends Controller
             'content' => $request->content,
             'status' => $request->status,
         ]);
-
+        
         return redirect()->back();
 
     }
@@ -104,7 +103,7 @@ class TasksController extends Controller
         return view('tasks.edit', [
             'task' => $task,
         ]);
-                return redirect('/');
+
     }
     
  public function update(Request $request, $id)
@@ -121,7 +120,7 @@ class TasksController extends Controller
         $task->content = $request->content;
         $task->save();
 
-        return redirect('/');
+
     }
     // "Delete processing" when `messages/id` is accessed by DELETE
     public function destroy ($id)
