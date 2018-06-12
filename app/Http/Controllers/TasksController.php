@@ -42,13 +42,18 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    {   
+        if (\Auth::check()) {
+            $user = \Auth::user();
         $task = new Tasklist;
 
         return view('tasks.create', [
             'task' => $task,
         ]);
         
+        }else {
+            return redirect('/');
+        }
     }
 
     /**
@@ -70,7 +75,7 @@ class TasksController extends Controller
             'status' => $request->status,
         ]);
         
-        return redirect()->back();
+        return redirect('/');
 
     }
 
@@ -81,13 +86,16 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    {   
+        if (\Auth::check()) {
+            $user = \Auth::user();
         $task = Tasklist::find($id);
         $data = [
             'task' => $task,
         ];
 
         return view('tasks.show', $data);
+    }
     }
 
     /**
@@ -103,6 +111,7 @@ class TasksController extends Controller
         return view('tasks.edit', [
             'task' => $task,
         ]);
+        
 
     }
     
@@ -119,6 +128,8 @@ class TasksController extends Controller
         $task->status = $request->status; 
         $task->content = $request->content;
         $task->save();
+        
+        return redirect('/');
 
 
     }
@@ -131,6 +142,6 @@ class TasksController extends Controller
             $tasklist->delete();
         }
 
-        return redirect()->back();
+        return redirect('/');
     }
 }
