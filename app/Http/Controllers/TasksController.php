@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Tasklist; 
+
+use App\Http\Controllers\Controller;
+
+use App\Tasklist;
+
+use App\User;
 
 class TasksController extends Controller
 {
@@ -14,11 +19,20 @@ class TasksController extends Controller
      */
     public function index()
     {
-                $tasks = Tasklist::all();
+        $data = [];
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $tasklists = $user->tasklists()->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('tasks.index', [
-            'tasks' => $tasks,
-        ]);
+            $data = [
+                'user' => $user,
+                'tasks' => $tasklists,
+            ];
+            $data += $this->counts($user);
+            return view('tasks.index', $data);
+        }else {
+            return view('welcome');
+        }
 
     }
 
@@ -34,6 +48,8 @@ class TasksController extends Controller
         return view('tasks.create', [
             'task' => $task,
         ]);
+        return redirect()->back();
+        
     }
 
     /**
@@ -44,17 +60,19 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, 
-        ['status' => 'required|max:10',
-        'content' => 'required|max:10',
-        ]);
         
-        $task = new Tasklist;
-        $task->status = $request->status;
-        $task->content = $request->content;
-        $task->save();
+        $this->validate($request, [
+            'content' => 'required|max:191',
+            'status' => 'required|max:10' ,
+        ]);
 
-        return redirect('/');
+        $request->user()->tasklists()->create([
+            'content' => $request->content,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->back();
+
     }
 
     /**
@@ -65,11 +83,12 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        $tasks = Tasklist::find($id);
+        $task = Tasklist::find($id);
+        $data = [
+            'task' => $task,
+        ];
 
-        return view('tasks.show', [
-            'task' => $tasks,
-        ]);
+        return view('tasks.show', $data);
     }
 
     /**
@@ -85,13 +104,15 @@ class TasksController extends Controller
         return view('tasks.edit', [
             'task' => $task,
         ]);
+                return redirect('/');
     }
     
  public function update(Request $request, $id)
     {
         
         $this->validate($request, 
-        ['status' => 'required|max:10',
+        [
+        'status' => 'required|max:10',
         'content' => 'required|max:10',
         ]);
         
@@ -105,9 +126,12 @@ class TasksController extends Controller
     // "Delete processing" when `messages/id` is accessed by DELETE
     public function destroy ($id)
     {
-         $task = Tasklist::find($id);
-        $task->delete();
+        $tasklist = \App\Tasklist::find($id);
 
-        return redirect('/');
+        if (\Auth::user()->id === $tasklist->user_id) {
+            $tasklist->delete();
+        }
+
+        return redirect()->back();
     }
 }

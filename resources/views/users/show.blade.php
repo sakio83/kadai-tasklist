@@ -19,14 +19,14 @@
                 <li><a href="#">Followers</a></li>
             </ul>
             @if (Auth::user()->id == $user->id)
-                  {!! Form::open(['route' => 'microposts.store']) !!}
+                  {!! Form::open(['route' => 'tasklists.store']) !!}
                       <div class="form-group">
                           {!! Form::textarea('content', old('content'), ['class' => 'form-control', 'rows' => '2']) !!}
                           {!! Form::submit('Task', ['class' => 'btn btn-primary btn-block']) !!}
                       </div>
                   {!! Form::close() !!}
             @endif
-            @if (count($microposts) > 0)
+            @if (count($tasklists) > 0)
                 @include('microposts.microposts', ['microposts' => $microposts])
             @endif
         </div>

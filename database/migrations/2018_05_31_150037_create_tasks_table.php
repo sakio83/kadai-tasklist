@@ -18,7 +18,7 @@ class CreateTasksTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->string('content');
             $table->timestamps();
-
+            
             // Foreign key constraint
             $table->foreign('user_id')->references('id')->on('users');
         });
