@@ -43,18 +43,14 @@ class TasksController extends Controller
      */
     public function create()
     {   
-        if (\Auth::check()) {
-            $user = \Auth::user();
+        
         $task = new Tasklist;
 
         return view('tasks.create', [
             'task' => $task,
         ]);
         
-        }else {
-            return redirect('/');
         }
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -87,14 +83,19 @@ class TasksController extends Controller
      */
     public function show($id)
     {   
-        if (\Auth::check()) {
-            $user = \Auth::user();
+        $tasklist = \App\Tasklist::find($id);
+        
+        if (\Auth::user()->id === $tasklist->user_id) {
+        $user = \Auth::user();
         $task = Tasklist::find($id);
         $data = [
             'task' => $task,
         ];
 
         return view('tasks.show', $data);
+    }
+    else {
+        return redirect('/');
     }
     }
 
