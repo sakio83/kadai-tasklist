@@ -43,14 +43,18 @@ class TasksController extends Controller
      */
     public function create()
     {   
+         if (\Auth::check()) {
+            $user = \Auth::user();
         
         $task = new Tasklist;
 
         return view('tasks.create', [
             'task' => $task,
         ]);
-        
-        }
+         }   else {
+             return redirect('/');
+         }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -84,19 +88,31 @@ class TasksController extends Controller
     public function show($id)
     {   
         $tasklist = \App\Tasklist::find($id);
+        if ($tasklist == null) {
+          return redirect('/');
+        }
+        else {
+            if (\Auth::check()) {
+                // if ($tasklist)
+                
+                if (\Auth::user()->id === $tasklist->user_id) {
+                    $user = \Auth::user();
+                    
+                    $task = Tasklist::find($id);
+                    $data = [
+                        'task' => $task,
+                    ];
         
-        if (\Auth::user()->id === $tasklist->user_id) {
-        $user = \Auth::user();
-        $task = Tasklist::find($id);
-        $data = [
-            'task' => $task,
-        ];
-
-        return view('tasks.show', $data);
-    }
-    else {
-        return redirect('/');
-    }
+                    return view('tasks.show', $data);
+                }
+                else {
+                    return redirect('/');
+                }
+            }
+            else {
+                return redirect('/');
+            }
+        }
     }
 
     /**
@@ -107,13 +123,31 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        $task = Tasklist::find($id);
-
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
+        $task = \App\Tasklist::find($id);
+        if ($task == null) {
+          return redirect('/');
+        }
+        else {
+            if (\Auth::check()) {
+                if (\Auth::user()->id === $task->user_id) 
+                {
+                    $user = \Auth::user();
+                
         
-
+                    return view('tasks.edit', [
+                    'task' => $task,
+                    ]);
+                    }
+                else 
+                    {return redirect('/');
+                        
+                }   
+            }else 
+                {return redirect('/');
+                    
+            }
+        
+        }
     }
     
  public function update(Request $request, $id)
